@@ -1,0 +1,178 @@
+/* HOME */
+
+.fullscreen #add-to-home-screen-hint {
+    display: none;
+}
+
+#header-left {
+    width: 173px;
+    height: 36px;
+    float: left;
+    margin-top: 75px;
+}
+
+#header-right {
+    width: 147px;
+    height: 134px;
+    float: right;
+}
+
+#header + * {
+    clear: both;
+}
+
+#home .info {
+    text-align: center;
+}
+
+#jqt #main-nav li a, #jqt #elsewhere-nav li a {
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    padding-left: 44px;
+}
+
+#jqt #link-schedule {
+    background-image: url('../img/icons/11-clock.png');
+}
+
+#jqt #link-venue {
+    background-image: url('../img/icons/103-map.png');
+}
+
+#jqt #link-tweets {
+    background-image: url('../img/icons/23-bird.png');
+}
+
+#jqt #link-photos {
+    background-image: url('../img/icons/86-camera.png');
+}
+
+#jqt #link-website {
+    background-image: url('../img/icons/53-house.png');
+}
+
+#footer {
+    margin: 15px;
+    text-align: center;
+    font-size: 9px;
+    color: #6B8893;
+    text-shadow: rgba(255,255,255,.8) 0 1px 0;
+}
+
+#footer a {
+    text-decoration: none;
+    color: #555;
+}
+
+
+/* SCHEDULE */
+
+#talks ul li {
+    font-size: 85%;
+}
+
+#talks ul li a {
+    padding-right: 56px;
+}
+
+.time {
+    color: #555;
+    font-weight: bold;
+    font-size: 90%;
+    text-shadow: none;
+    margin-right: 10px;
+}
+
+#jqt ul.rounded h1, #jqt ul.rounded h2 {
+    margin: 0;
+}
+
+#jqt ul.rounded h1, #jqt ul.rounded h2 {
+    text-shadow: rgba(255,255,255,.8) 0 1px 0;
+}
+#jqt ul.rounded h2 {
+    font-weight: normal;
+    margin-bottom: 4px;
+}
+
+#jqt .datetime, #jqt .description {
+    font-size: 14px;
+    color: #6B8893;
+}
+
+/* SPONSORS */
+
+h3 {
+    text-align: center;
+    font-size: 11px;
+    text-shadow: rgba(255,255,255,.8) 0 1px 0;
+    color: #5F7982;
+    font-weight: normal;
+}
+
+#sponsors {
+    height: 37px;
+    margin: 5px 0 10px 0;
+    white-space: nowrap;
+    
+    -webkit-transform: translate(0,0);
+    
+    -webkit-animation-name: 'slide';
+    -webkit-animation-duration: 20s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes 'slide' {
+    0% {
+        -webkit-transform: translate(0,0);
+    }
+    100% {
+        -webkit-transform: translate(-723px, 0);
+    }
+}
+
+#sponsors img {
+    margin: 0 20px;
+}
+
+/* VENUE */
+
+#img-palisade {
+    border: 10px solid #FFF;
+    -webkit-box-shadow: rgba(0,0,0,0.5) 0px 1px 3px;
+    margin: 0 11px;
+}
+
+
+/* TWEETS */
+
+#tweet-list .tweet {
+    padding-left: 58px;
+    font-size: 80%;
+    min-height: 50px;
+}
+
+#tweet-list .tweet img {
+    position: absolute;
+    left: 21px;
+    border: 1px solid #ccc;
+    width: 48px;
+    height: 48px;
+}
+
+#tweet-list .tweet-user {
+    font-weight: bold;
+    color: #555;
+    text-shadow: rgba(255,255,255,0.7) 0px -1px;
+}
+
+#tweet-list .tweet-datetime {
+    font-size: 10px;
+    color: #555;
+}
+
+#tweet-template {
+    display: none;
+}

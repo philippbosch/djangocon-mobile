@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>DjangoCon</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="jqtouch/jqtouch.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="themes/djangocon/theme.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/iphone.css">
+        <script src="jqtouch/jquery.js" type="application/x-javascript" charset="utf-8"></script>
+        <script src="jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            var jQT = $.jQTouch({ 
+                icon: 'img/touch-icon.png',
+                addGlossToIcon: false,
+                startupScreen: 'img/touch-splash.png',
+                statusBar: 'black'
+            });
+            
+            function padZero(number, len) {
+                if (!len) len=2;
+                number = String(number);
+                if (number.length < len) {
+                    for (var i=len-number.length; i>0; i--) {
+                        number = '0' + number;
+                    }
+                }
+                return number;
+            }
+            
+            $(document).ready(function() {
+                /* SCHEDULE */
+                var weekdays = {
+                    '0': 'Sunday',
+                    '1': 'Monday',
+                    '2': 'Tuesday',
+                    '3': 'Wednesday',
+                    '4': 'Thursday',
+                    '5': 'Friday',
+                    '6': 'Saturday'
+                };
+                $.getJSON('http://pipes.yahoo.com/pipes/pipe.run?_id=873a769c483de1e489b4ec808c0ddef7&_render=json&_callback=?', function(data) {
+                // $.getJSON('talks.json', function(data) {
+                    $.each(data.value.items, function(i) {
+                        /* schedule item */
+                        var titleParts = this.title.split(/\:\s*/);
+                        var $li = $('<li>');
+                        var $time = $('<span class="time">').text(padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute));
+                        if (titleParts.length == 1) {
+                            $li.text(this.title);
+                            $li.prepend($time);
+                        } else {
+                            $li.addClass('arrow');
+                            var $speaker = $('<a>', {'href': '#talk-' + i}).text(titleParts[0]);
+                            var $title = $('<a>', {'href': '#talk-' + i}).text(titleParts[1]);
+                            $speaker.prepend($time);
+                            $li.append($speaker, $title);
+                        }
+                        $('#talks-' + this['y:dtstart'].month + '-' + this['y:dtstart'].day).append($li);
+                        
+                        /* details panel */
+                        if (titleParts.length > 1) {
+                            var $panel = $('#talk-template').clone().attr('id', 'talk-' + i);
+                            $('ul h1', $panel).text(titleParts[0]);
+                            $('ul h2', $panel).text(titleParts[1]);
+                            $('.datetime', $panel).text(weekdays[this['y:dtstart'].day_of_week] + ', ' + padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute) + '-' + padZero(parseInt(this['y:dtend'].hour)+2) + ':' + padZero(this['y:dtend'].minute));
+                            $('.description', $panel).text(this.description);
+                            $panel.appendTo('#jqt');
+                        }
+                    });
+                });
+                
+                /* TWEETS */
+                $.getJSON('http://search.twitter.com/search.json?q=%23io2010&result_type=recent&rpp=20&callback=?', function(data) {
+                    $.each(data.results, function(i) {
+                        $tweet = $('#tweet-template').clone().attr('id','tweet-' + i);
+                        $('.tweet-user', $tweet).text(this.from_user);
+                        $('.tweet-text', $tweet).text(this.text);
+                        $('.tweet-datetime', $tweet).text(this.created_at);
+                        $('img', $tweet).attr('src', this.profile_image_url);
+                        $tweet.appendTo('#tweet-list');
+                    });
+                    $('#tweet-template').remove();
+                });
+            });
+            
+        </script>
+    </head>
+    <body>
+        <div id="jqt">
+            <div id="dashboard" __class="current">
+                <div id="header">
+                    <img src="img/header-left.png" id="header-left" alt="djangocon.eu 2010"><img src="img/header-right.png" id="header-right" alt="">
+                </div>
+                <ul class="rounded" id="main-nav">
+                    <li class="arrow"><a href="#talks" id="link-schedule">Schedule</a></li>
+                    <li class="arrow"><a href="#venue" id="link-venue">Venue</a></li>
+                    <li class="arrow"><a href="#tweets" id="link-tweets">Tweets</a></li>
+                    <li class="arrow"><a href="#photos" id="link-photos">Photos</a></li>
+                </ul>
+                <h3>Sponsored by:</h3>
+                <div id="sponsors">
+                    <a href="http://www.divio.ch/" target="_blank"><img src="img/sponsor_01.png" alt="divio"></a>
+                    <a href="http://www.atlassian.com/" target="_blank"><img src="img/sponsor_02.png" alt="divio"></a>
+                    <a href="http://www.tschitschereengreen.com/" target="_blank"><img src="img/sponsor_03.png" alt="divio"></a>
+                    <a href="http://www.cs247.de/" target="_blank"><img src="img/sponsor_04.png" alt="divio"></a>
+                    <a href="http://pixane.com/" target="_blank"><img src="img/sponsor_05.png" alt="divio"></a>
+                    <a href="http://www.divio.ch/" target="_blank"><img src="img/sponsor_01.png" alt="divio"></a>
+                    <a href="http://www.atlassian.com/" target="_blank"><img src="img/sponsor_02.png" alt="divio"></a>
+                    <a href="http://www.tschitschereengreen.com/" target="_blank"><img src="img/sponsor_03.png" alt="divio"></a>
+                    <a href="http://www.cs247.de/" target="_blank"><img src="img/sponsor_04.png" alt="divio"></a>
+                    <a href="http://pixane.com/" target="_blank"><img src="img/sponsor_05.png" alt="divio"></a>
+                    <a href="http://www.divio.ch/" target="_blank"><img src="img/sponsor_01.png" alt="divio"></a>
+                    <a href="http://www.atlassian.com/" target="_blank"><img src="img/sponsor_02.png" alt="divio"></a>
+                    <a href="http://www.tschitschereengreen.com/" target="_blank"><img src="img/sponsor_03.png" alt="divio"></a>
+                    <a href="http://www.cs247.de/" target="_blank"><img src="img/sponsor_04.png" alt="divio"></a>
+                    <a href="http://pixane.com/" target="_blank"><img src="img/sponsor_05.png" alt="divio"></a>
+                </div>
+                <div class="info" id="add-to-home-screen-hint">
+                    <p>Add this page to your home screen using the <strong style="font-size: 150%">+</strong> button to get the full experience.</p>
+                </div>
+                <div class="info">
+                    <p>Tag your stuff (tweets, photos, blog posts, …) with <strong>#edc10</strong>.</p>
+                </div>
+                <ul class="rounded" id="elsewhere-nav">
+                    <li class="forward"><a href="http://djangocon.eu/" id="link-website">Official Website</a></li>
+                </ul>
+                <div id="footer">
+                    iPhone app development by <a href="http://pb.io/" target="_blank">Philipp Bosch</a>.
+                </div>
+            </div>
+            
+            <div id="talks">
+                <div class="toolbar">
+                    <h1>Talks</h1>
+                    <a href="#" class="back">Back</a>
+                </div>
+                <h2>Monday, May 24</h2>
+                <ul class="rounded" id="talks-5-24"></ul>
+                <h2>Tuesday, May 25</h2>
+                <ul class="rounded" id="talks-5-25"></ul>
+                <h2>Wednesday, May 26</h2>
+                <ul class="rounded" id="talks-5-26"></ul>
+            </div>
+            
+            <div id="talk-template">
+                <div class="toolbar">
+                    <h1>Details</h1>
+                    <a href="#" class="back">Back</a>
+                </div>
+                <ul class="rounded">
+                    <li>
+                        <h1>Speaker</h1>
+                        <h2>Talk Title</h2>
+                        <div class="datetime">Date/time</div>
+                        <div class="description">Audience level</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="venue">
+                <div class="toolbar">
+                    <h1>Venue</h1>
+                    <a href="#" class="back">Back</a>
+                </div>
+                <h1>Palisa.de</h1>
+                <img src="img/palisade.jpg" alt="palisa.de" id="img-palisade">
+                <ul class="rounded">
+                    <li>
+                        <p class="description">The venue is an extensively restored industrial monument built in 1899 and is just a few minutes away from Alexanderplatz, a large square in Berlin's city center.</p>
+                    </li>
+                    <li>
+                        <h2>Address</h2>
+                        <p class="description">Palisadenstraße 48<br/>10245 Berlin<br/>Germany<br/><a href="http://www.palisa.de/" target="_blank">www.palisa.de</a></p>
+                    </li>
+                    <li class="forward"><a href="http://www.palisa.de/" target="_blank">Venue Website</a></li>
+                </ul>
+                <h1>Directions</h1>
+                <ul class="rounded">
+                    <li class="forward"><a href="http://maps.google.com/maps?q=Palisa.de,%20Palisadenstr.%2048%4052.518792,13.439455" target="_blank">Google Map</a></li>
+                    <li>
+                        <p class="description"><strong>Subway</strong><br/>The nearest subway station is «Weberwiese» which can be reached by U5 from Alexanderplatz (direction «Hönow»).</p>
+                    </li>
+                    <li>
+                        <p class="description"><strong>S-Bahn/Train</strong><br/>Take S3, S5, S7, S75 or regional/long-distance trains to «Ostbahnhof». From there take a bus (see below) or a 10 minute walk.</p>
+                    </li>
+                    <li>
+                        <p class="description"><strong>Bus</strong><br/>Take bus 347 to «U Weberwiese» (2 minute walk) or bus 142 to «U Strausberger Platz» or «Franz-Mehring-Platz» (5 minute walk).</p>
+                    </li>
+                    <li class="forward"><a href="http://www.palisa.de/wp-content/uploads/2010/02/palisade-anfahrt.pdf" target="_blank">By car (PDF)</a></li>
+                </ul>
+            </div>
+            
+            <div id="tweets">
+                <div class="toolbar">
+                    <h1>Tweets</h1>
+                    <a href="#" class="back">Back</a>
+                </div>
+                <ul class="rounded" id="tweet-list">
+                    <li id="tweet-template">
+                        <div class="tweet">
+                            <img>
+                            <div class="tweet-user"></div>
+                            <p class="tweet-text"></p>
+                            <div class="tweet-datetime"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
