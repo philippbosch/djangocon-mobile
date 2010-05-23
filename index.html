@@ -19,6 +19,7 @@
                     'themes/djangocon/img/back_button_clicked.png',
                 ]
             });
+            var tweetTemplate;
             
             function padZero(number, len) {
                 if (!len) len=2;
@@ -42,49 +43,74 @@
                     '5': 'Friday',
                     '6': 'Saturday'
                 };
-                $.getJSON('http://pipes.yahoo.com/pipes/pipe.run?_id=873a769c483de1e489b4ec808c0ddef7&_render=json&_callback=?', function(data) {
-                // $.getJSON('talks.json', function(data) {
-                    $.each(data.value.items, function(i) {
-                        /* schedule item */
-                        var titleParts = this.title.split(/\:\s*/);
-                        var $li = $('<li>');
-                        var $time = $('<span class="time">').text(padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute));
-                        if (titleParts.length == 1) {
-                            $li.text(this.title);
-                            $li.prepend($time);
-                        } else {
-                            $li.addClass('arrow');
-                            var $speaker = $('<a>', {'href': '#talk-' + i}).text(titleParts[0]);
-                            var $title = $('<a>', {'href': '#talk-' + i}).text(titleParts[1]);
-                            $speaker.prepend($time);
-                            $li.append($speaker, $title);
-                        }
-                        $('#talks-' + this['y:dtstart'].month + '-' + this['y:dtstart'].day).append($li);
-                        
-                        /* details panel */
-                        if (titleParts.length > 1) {
-                            var $panel = $('#talk-template').clone().attr('id', 'talk-' + i);
-                            $('ul h1', $panel).text(titleParts[0]);
-                            $('ul h2', $panel).text(titleParts[1]);
-                            $('.datetime', $panel).text(weekdays[this['y:dtstart'].day_of_week] + ', ' + padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute) + '-' + padZero(parseInt(this['y:dtend'].hour)+2) + ':' + padZero(this['y:dtend'].minute));
-                            $('.description', $panel).text(this.description);
-                            $panel.appendTo('#jqt');
-                        }
-                    });
+                $('#talks').bind('pageAnimationStart', function(e,info) {
+                    if (info.direction == 'in' && !$('#talks').data('populated')) {
+                        var talksJSONurl;
+                        if (navigator.onLine) talksJSONurl = 'http://pipes.yahoo.com/pipes/pipe.run?_id=873a769c483de1e489b4ec808c0ddef7&_render=json&_callback=?';
+                        else talksJSONurl = 'talks.json';
+                        $.getJSON(talksJSONurl, function(data) {
+                            $('#talks-5-24, #talks-5-25, #talks-5-26').find('li').remove();
+                            $.each(data.value.items, function(i) {
+                                /* schedule item */
+                                var titleParts = this.title.split(/\:\s*/);
+                                var $li = $('<li>');
+                                var $time = $('<span class="time">').text(padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute));
+                                if (titleParts.length == 1) {
+                                    $li.text(this.title);
+                                    $li.prepend($time);
+                                } else {
+                                    $li.addClass('arrow');
+                                    var $speaker = $('<a>', {'href': '#talk-' + i}).text(titleParts[0]);
+                                    var $title = $('<a>', {'href': '#talk-' + i}).text(titleParts[1]);
+                                    $speaker.prepend($time);
+                                    $li.append($speaker, $title);
+                                }
+                                $('#talks-' + this['y:dtstart'].month + '-' + this['y:dtstart'].day).append($li);
+
+                                /* details panel */
+                                if (titleParts.length > 1) {
+                                    var $panel = $('#talk-template').clone().attr('id', 'talk-' + i);
+                                    $('ul h1', $panel).text(titleParts[0]);
+                                    $('ul h2', $panel).text(titleParts[1]);
+                                    $('.datetime', $panel).text(weekdays[this['y:dtstart'].day_of_week] + ', ' + padZero(parseInt(this['y:dtstart'].hour)+2) + ':' + padZero(this['y:dtstart'].minute) + '-' + padZero(parseInt(this['y:dtend'].hour)+2) + ':' + padZero(this['y:dtend'].minute));
+                                    $('.description', $panel).text(this.description);
+                                    $panel.appendTo('#jqt');
+                                }
+                            });
+                            $('#talks').data('populated', true);
+                        });
+                    }
                 });
                 
                 /* TWEETS */
-                $.getJSON('http://search.twitter.com/search.json?q=%23djangocon&result_type=recent&rpp=20&callback=?', function(data) {
-                    $.each(data.results, function(i) {
-                        $tweet = $('#tweet-template').clone().attr('id','tweet-' + i);
-                        $('.tweet-user', $tweet).text(this.from_user);
-                        $('.tweet-text', $tweet).html(this.text);
-                        $('.tweet-datetime', $tweet).text(this.created_at);
-                        $('img', $tweet).attr('src', this.profile_image_url);
-                        $tweet.appendTo('#tweet-list');
-                    });
-                    $('#tweet-template').remove();
+                tweetTemplate = $('#tweet-template').clone().attr('id','');
+                $('#tweet-template').remove();
+                $('#tweets').bind('pageAnimationStart', function(e, info) {
+                    if (info.direction == 'in') {
+                        updateTweets();
+                    }
                 });
+                $('#tweets-reload').click(function(e) {
+                    e.preventDefault();
+                    $('#tweets-reload').addClass('active');
+                    updateTweets(function() {
+                        $('#tweets-reload').removeClass('active');
+                    });
+                });
+                function updateTweets(callback) {
+                    $.getJSON('http://search.twitter.com/search.json?q=%23djangocon&result_type=recent&rpp=50&callback=?', function(data) {
+                        $('#tweet-list li:visible').remove();
+                        $.each(data.results, function(i) {
+                            $tweet = tweetTemplate.clone().attr('id','tweet-' + i);
+                            $('.tweet-user', $tweet).text(this.from_user);
+                            $('.tweet-text', $tweet).html(this.text);
+                            $('.tweet-datetime', $tweet).text(this.created_at);
+                            $('img', $tweet).attr('src', this.profile_image_url);
+                            $tweet.appendTo('#tweet-list');
+                        });
+                        if (typeof(callback) == 'function') callback();
+                    });
+                }
                 
                 /* OFFLINE CACHE */
                 if (window.applicationCache) {
@@ -148,11 +174,11 @@
                     <a href="#" class="back">Back</a>
                 </div>
                 <h2>Monday, May 24</h2>
-                <ul class="rounded" id="talks-5-24"></ul>
+                <ul class="rounded" id="talks-5-24"><li>Loading …</li></ul>
                 <h2>Tuesday, May 25</h2>
-                <ul class="rounded" id="talks-5-25"></ul>
+                <ul class="rounded" id="talks-5-25"><li>Loading …</li></ul>
                 <h2>Wednesday, May 26</h2>
-                <ul class="rounded" id="talks-5-26"></ul>
+                <ul class="rounded" id="talks-5-26"><li>Loading …</li></ul>
             </div>
             
             <div id="talk-template">
@@ -207,8 +233,10 @@
                 <div class="toolbar">
                     <h1>Tweets</h1>
                     <a href="#" class="back">Back</a>
+                    <a href="#" class="button" id="tweets-reload"><img src="img/icons/01-refresh.png"></a>
                 </div>
                 <ul class="rounded" id="tweet-list">
+                    <li class="loading">Loading …</li>
                     <li id="tweet-template">
                         <div class="tweet">
                             <img>

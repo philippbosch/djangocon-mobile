@@ -149,6 +149,10 @@ h3 {
 
 /* TWEETS */
 
+#tweets-reload img {
+    margin-top: 7px;
+}
+
 #tweet-list .tweet {
     padding-left: 58px;
     font-size: 80%;
