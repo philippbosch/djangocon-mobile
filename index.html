@@ -85,6 +85,15 @@
                     });
                     $('#tweet-template').remove();
                 });
+                
+                /* OFFLINE CACHE */
+                if (window.applicationCache) {
+                    $(window.applicationCache).bind('updateready', function(e) {
+                        if (window.confirm('An update to the DjangoCon app is ready to be installed. Restart?')) {
+                            window.location.reload();
+                        }
+                    });
+                }
             });
             
         </script>
