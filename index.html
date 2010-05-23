@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html manifest="cache.manifest">
     <head>
         <meta charset="UTF-8" />
         <title>DjangoCon</title>
@@ -74,7 +74,7 @@
                     $.each(data.results, function(i) {
                         $tweet = $('#tweet-template').clone().attr('id','tweet-' + i);
                         $('.tweet-user', $tweet).text(this.from_user);
-                        $('.tweet-text', $tweet).text(this.text);
+                        $('.tweet-text', $tweet).html(this.text);
                         $('.tweet-datetime', $tweet).text(this.created_at);
                         $('img', $tweet).attr('src', this.profile_image_url);
                         $tweet.appendTo('#tweet-list');

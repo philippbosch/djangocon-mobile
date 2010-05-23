@@ -1,0 +1,36 @@
+CACHE MANIFEST
+index.html
+css/iphone.css
+img/header-left.png
+img/header-right.png
+img/palisade.jpg
+img/sponsor_01.png
+img/sponsor_02.png
+img/sponsor_03.png
+img/sponsor_04.png
+img/sponsor_05.png
+img/touch-icon.png
+img/touch-splash.png
+img/icons/08-chat.png
+img/icons/103-map.png
+img/icons/11-clock.png
+img/icons/23-bird.png
+img/icons/53-house.png
+img/icons/86-camera.png
+jqtouch/jqtouch.min.css
+jqtouch/jqtouch.min.js
+jqtouch/jquery.js
+themes/djangocon/theme.css
+themes/djangocon/img/back_button.png
+themes/djangocon/img/back_button_clicked.png
+themes/djangocon/img/chevron.png
+themes/djangocon/img/chevron_circle.png
+themes/djangocon/img/noise.png
+themes/djangocon/img/noise2.png
+favicon.ico
+
+NETWORK:
+http://pipes.yahoo.com/
+http://search.twitter.com/
+
+# 2010-05-23 13:14:22
