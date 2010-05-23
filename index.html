@@ -10,10 +10,14 @@
         <script src="jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>
         <script type="text/javascript">
             var jQT = $.jQTouch({ 
-                icon: 'img/touch-icon.png',
-                addGlossToIcon: false,
-                startupScreen: 'img/touch-splash.png',
-                statusBar: 'black'
+                'icon': 'img/touch-icon.png',
+                'addGlossToIcon': false,
+                'startupScreen': 'img/touch-splash.png',
+                'statusBar': 'black',
+                'preloadImages': [
+                    'themes/djangocon/img/back_button.png',
+                    'themes/djangocon/img/back_button_clicked.png',
+                ]
             });
             
             function padZero(number, len) {
