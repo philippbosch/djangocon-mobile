@@ -70,7 +70,7 @@
                 });
                 
                 /* TWEETS */
-                $.getJSON('http://search.twitter.com/search.json?q=%23io2010&result_type=recent&rpp=20&callback=?', function(data) {
+                $.getJSON('http://search.twitter.com/search.json?q=%23djangocon&result_type=recent&rpp=20&callback=?', function(data) {
                     $.each(data.results, function(i) {
                         $tweet = $('#tweet-template').clone().attr('id','tweet-' + i);
                         $('.tweet-user', $tweet).text(this.from_user);
@@ -119,7 +119,7 @@
                     <p>Add this page to your home screen using the <strong style="font-size: 150%">+</strong> button to get the full experience.</p>
                 </div>
                 <div class="info">
-                    <p>Tag your stuff (tweets, photos, blog posts, …) with <strong>#edc10</strong>.</p>
+                    <p>Tag your stuff (tweets, photos, blog posts, …) with <strong>#djangocon</strong>.</p>
                 </div>
                 <ul class="rounded" id="elsewhere-nav">
                     <li class="forward"><a href="http://djangocon.eu/" id="link-website">Official Website</a></li>
