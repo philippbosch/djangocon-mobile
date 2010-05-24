@@ -181,3 +181,28 @@ h3 {
 #tweet-template {
     display: none;
 }
+
+
+/* PHOTOS */
+
+img.zoom {
+    width: 100%;
+}
+
+#jqt #photos-list {
+    margin-left: 4px;
+    width: 100%;
+    float: left;
+    margin-bottom: 15px;
+}
+
+#jqt #photos-list img {
+    float: left;
+    display: block;
+    margin: 4px 4px 0 0;
+}
+
+#jqt #photos ul {
+    clear: left;
+    margin-top: 15px;
+}
