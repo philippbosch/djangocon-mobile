@@ -114,6 +114,33 @@
                     });
                 }
                 
+                /* PHOTOS */
+                $('#photos').bind('pageAnimationStart', function(e,info) {
+                    if ($('#photos').data('populated')) return;
+                    $.getJSON('http://query.yahooapis.com/v1/public/yql/philippbosch/djangocon_photos?format=json&callback=?', function(data) {
+                        $('#photos-list').html('');
+                        $.each(data.query.results.photo, function(i) {
+                            var $a = $('<a>', {'href': '#photo-zoom-' + i});
+                            $a.bind('click tap', function(e) {
+                                e.preventDefault();
+                                jQT.goTo($(this).attr('href'), 'slide');
+                            });
+                            var $img = $('<img>', {'src': 'http://farm' + this.farm + '.static.flickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_s.jpg'});
+                            $img.appendTo($a);
+                            $a.appendTo('#photos-list');
+                            
+                            var $zoomPanel = $('#photo-zoom-template').clone().attr('id','photo-zoom-' + i);
+                            $zoomPanel.find('img.zoom').attr('longdesc', 'http://farm' + this.farm + '.static.flickr.com/' + this.server + '/' + this.id + '_' + this.secret + '.jpg');
+                            $zoomPanel.appendTo('#jqt');
+                        });
+                        $('#photos').data('populated', true);
+                    });
+                });
+                $('div.zoom').live('pageAnimationStart', function(e,info) {
+                    var $img = $(this).find('img.zoom');
+                    $img.attr('src', $img.attr('longdesc'));
+                });
+                
                 /* OFFLINE CACHE */
                 if (window.applicationCache) {
                     $(window.applicationCache).bind('updateready', function(e) {
@@ -255,14 +282,23 @@
                     <h1>Photos</h1>
                     <a href="#" class="back">Back</a>
                 </div>
+                
+                <div id="photos-list"><ul class="rounded"><li>Loading …</li></ul></div>
+                
                 <ul class="rounded">
-                    <li>
-                        <p class="description">We're still working on this part of the app. Meanwhile upload your photos to Flickr and tag them with <strong>djangocon</strong>.</p>
-                    </li>
                     <li class="forward">
                         <a href="http://m.flickr.com/#/search/advanced_QM_q_IS_djangocon_AND_ss_IS_2_AND_prefs_photos_IS_1_AND_prefs_screenshots_IS_1_AND_prefs_other_IS_1_AND_mt_IS_all_AND_w_IS_all_AND_s_IS_rec" target="_webapp">See photos on Flickr.com</a>
                     </li>
                 </ul>
+            </div>
+            
+            <div id="photo-zoom-template" class="zoom">
+                <div class="toolbar">
+                    <h1>Photos</h1>
+                    <a href="#" class="back">Back</a>
+                </div>
+                
+                <img class="zoom">
             </div>
         </div>
     </body>
