@@ -48,8 +48,9 @@
                 $('#talks').bind('pageAnimationStart', function(e,info) {
                     if (info.direction == 'in' && !$('#talks').data('populated')) {
                         var talksJSONurl;
-                        if (navigator.onLine) talksJSONurl = 'http://pipes.yahoo.com/pipes/pipe.run?_id=873a769c483de1e489b4ec808c0ddef7&_render=json&_callback=?';
-                        else talksJSONurl = 'talks.json';
+                        /* if (navigator.onLine) talksJSONurl = 'http://pipes.yahoo.com/pipes/pipe.run?_id=873a769c483de1e489b4ec808c0ddef7&_render=json&_callback=?';
+                        else */
+                        talksJSONurl = 'talks.json';
                         $.getJSON(talksJSONurl, function(data) {
                             $('#talks-5-24, #talks-5-25, #talks-5-26').find('li').remove();
                             $.each(data.value.items, function(i) {
